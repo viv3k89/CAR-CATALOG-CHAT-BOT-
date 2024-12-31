@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy a New Car</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #004d99;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav ul li {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        nav ul li:hover {
+            background-color: #0066cc;
+        }
+
+        nav .search-bar {
+            position: relative;
+        }
+
+        nav .search-bar input {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+            width: 200px;
+        }
+
+        nav .search-bar button {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            border: none;
+            background: none;
+            color: #004d99;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-image: url("https://cdn.ramseysolutions.net/daveramsey.com/media/blog/saving/large-expenses/how-to-get-your-dream-car.jpg");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 10rem 7rem;
+            position: relative;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero button {
+            background-color: #ff9933;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero button:hover {
+            background-color: #e68a00;
+        }
+
+        /* Filter Section */
+        .filter {
+            text-align: center;
+            padding: 2rem;
+            background-color: #fff;
+            margin: 1rem 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter input[type="range"] {
+            width: 60%;
+            margin-top: 1rem;
+        }
+
+        .filter #priceValue {
+            display: block;
+            margin-top: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Car List */
+        .car-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .car-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .car-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .car-card:hover {
+            transform: scale(1.05);
+        }
+
+        .car-card h3 {
+            margin: 0.5rem 0;
+            font-size: 1.2rem;
+            color: #004d99;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 500px;
+            width: 80%;
+            position: relative;
+        }
+
+        .modal-content img {
+            width: 150px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">CarExplorer</div>
+        <ul>
+            <li>Home</li>
+            <li>About</li>
+            <li>Contact</li>
+        </ul>
+        <div class="search-bar">
+            <input type="text" placeholder="Search Cars...">
+            <button>&#128269;</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Discover Your Dream Car</h1>
+        <p>Find the perfect car that fits your style and budget.</p>
+        <button>Explore Cars</button>
+    </section>
+
+    <!-- Filter Section -->
+    <section id="cars" class="car-section">
+        <div class="filter">
+            <h2>Filter by Price:</h2>
+            <label>Max Price:
+                <input type="range" id="priceRange" min="30000" max="200000" value="80000"
+                    oninput="updatePriceDisplay()">
+            </label>
+            <span id="priceValue">$80,000</span>
+        </div>
+
+        <!-- Car List -->
+        <div class="car-list" id="carList"></div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal" id="carModal">
+        <div class="modal-content">
+            <button class="close-btn">&times;</button>
+            <img id="carImage" src="" alt="Car Image">
+            <h2 id="carName"></h2>
+            <ul id="carSpecs"></ul>
+        </div>
+    </div>
+    <section id="home">
+        <h2>Welcome to CarExplorer</h2>
+        <p>Your one-stop solution for finding the perfect car.</p>
+    </section>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <p>We connect car buyers with the best deals on the market.</p>
+    </section>
+
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <p>Email: contact@carexplorer.com</p>
+        <p>Phone: +1234567890</p>
+    </section>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const carData = [
+                { id: 1, name: "Tata Nexon", price: 40000, image: "https://imgd.aeplcdn.com/370x208/n/daabmbb_1688461.jpg?q=80", specs: ["Engine Type: Petrol", "Transmission: Automatic", "Type: SUV"] },
+                { id: 2, name: "Maruti Suzuki Swift", price: 35000, image: "https://shivamautozone.com/wp-content/uploads/2024/05/Swift-8-768x433.webp", specs: ["Engine Type: Diesel", "Transmission: Manual", "Type: Hatchback"] },
+                { id: 3, name: "Mahindra XUV700", price: 70000, image: "https://imgd.aeplcdn.com/664x374/n/cw/ec/42355/xuv700-exterior-right-front-three-quarter-3.jpeg?isig=0&q=80" },
+                { id: 4, name: "Hyundai Creta", price: 75000, image: "https://imgd.aeplcdn.com/664x374/n/cw/ec/141115/creta-exterior-right-front-three-quarter-16.jpeg?isig=0&q=80" },
+                { id: 5, name: "Honda City", price: 85000, image: "https://img.gaadicdn.com/images/car-images/large/Honda/City/9710/1677754515528/222_Platinum-White-Pearl_b8b8c0.jpg" },
+                { id: 6, name: "Toyota Corolla", price: 95000, image: "https://imgd.aeplcdn.com/1056x594/n/qmu56ra_1421817.jpg?q=80" },
+                { id: 7, name: "BMW X5", price: 125000, image: "https://prod.cosy.bmw.cloud/bmvis/cosySec?COSY-EU-100-2545J3qAHyFnz5cRoHSWRzMESDsVcRoH7QRzMESV59VMb3G6bUJ1rjGRPixrQbUoaFoGq0zdgtKal38mrjGm7SErQbCUQMs2q0zRERW8J13882q0zAanj4l382hhq0zkRNSQBL4QSW8zLAd8W8J1ExSnQNUMESQdoBuKUQqoQEdcNq0zkdHNqoQqRrjGzIEtN3WCIqx8W8zWu3n9qogqaRnvl3ilUb1%25cRScH8Q3MbnMdomsyJGy53sBrQ%25r9R1HW8zWubxdqogqaFHdl3ilUj8ocRScH7o7MbnMd0o6yJGy5BOUrQ%25r9SaJW8zWunRUqogqaGQ7l3ilU%258jcRScHzesMbnMdg7oyJGy5i0BrQ%25r9SDGW8zWun9IqogqaGS0l3ilU%2539cRScHzN7MbnMdgCEyJGy5mSBrQ%25r9sRnW8zWuKbIqogqaDnOl3ilURFjcRScHb8gMbnMdJoHyJGy5Q3grQ%25r98UnW8zWuonjqogqa3GIl3ilUR3AcRScHb6oMbnMdJCRyJGy5Q4BrQ%25r99aRW8zWuBJjqogqaYQ4l3ilUE40cRScHFj9MbnMdj%25OyJGy572RrQbZUe8nIulBg3a9Tl38vrjGQ9saUW8JfQiAKq0zS3JW8J2MESW8%255uarQbucYia4" },
+                { id: 8, name: "Audi A6", price: 140000, image: "https://imgd.aeplcdn.com/664x374/n/cw/ec/39472/a6-exterior-right-front-three-quarter-2.jpeg?isig=0&q=80" },
+                { id: 9, name: "Mercedes-Benz C-Class", price: 180000, image: "https://imgd.aeplcdn.com/664x374/n/cw/ec/178535/c-class-exterior-right-front-three-quarter.jpeg?isig=0&q=80", specs: ["Engine Type: Petrol", "Transmission: Automatic", "Type: Sedan"] },
+                { id: 10, name: "Tesla Model 3", price: 200000, image: "https://cdn-www.pod-point.com/model-3-21-white-background.jpg", specs: ["Engine Type: Electric", "Transmission: Automatic", "Type: Sedan"] }
+            ];
+
+            const carList = document.getElementById("carList");
+            const priceRange = document.getElementById("priceRange");
+            const priceValue = document.getElementById("priceValue");
+            const modal = document.getElementById("carModal");
+            const carName = document.getElementById("carName");
+            const carSpecs = document.getElementById("carSpecs");
+            const closeBtn = document.querySelector(".close-btn");
+
+            // Initial display of cars
+            displayCars(carData);
+
+            priceRange.addEventListener("input", function () {
+                updatePriceDisplay();
+                filterCars();
+            });
+
+            function updatePriceDisplay() {
+                priceValue.textContent = `$${parseInt(priceRange.value).toLocaleString()}`;
+            }
+
+            function filterCars() {
+                const maxPrice = parseInt(priceRange.value);
+                const filteredCars = carData.filter(car => car.price <= maxPrice);
+                displayCars(filteredCars);
+            }
+
+            function displayCars(cars) {
+                carList.innerHTML = "";
+                if (cars.length === 0) {
+                    carList.innerHTML = "<p>No cars available within this price range.</p>";
+                } else {
+                    cars.forEach(car => {
+                        const carCard = document.createElement("div");
+                        carCard.classList.add("car-card");
+                        carCard.innerHTML = `
+                                <img src="${car.image}" alt="${car.name}">
+                                <h3>${car.name}</h3>
+                                <p>Price: $${car.price.toLocaleString()}</p>
+                            `;
+                        carCard.addEventListener("click", () => showCarDetails(car));
+                        carList.appendChild(carCard);
+                    });
+                }
+            }
+
+            function showCarDetails(car) {
+                carName.textContent = car.name;
+                carSpecs.innerHTML = "";
+                car.specs.forEach(spec => {
+                    const li = document.createElement("li");
+                    li.textContent = spec;
+                    carSpecs.appendChild(li);
+                });
+                modal.style.display = "flex";
+            }
+
+            function closeModal() {
+                modal.style.display = "none";
+            }
+
+            // Attach the closeModal function to the close button
+            closeBtn.addEventListener("click", closeModal);
+
+            // Optional: Close the modal when clicking outside the content
+            modal.addEventListener("click", function (e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        });
+
+    </script>
+    <script>
+        const cars = [
+            {
+                id: 1,
+                name: "Tata Nexon",
+                price: 100000,
+                details: ["Engine: 1.2L Turbo", "Mileage: 20 km/l", "Seats: 5"]
+            },
+            {
+                id: 2,
+                name: "Maruti Suzuki Swift",
+                price: 70000,
+                details: ["Engine: 1.3L", "Mileage: 22 km/l", "Seats: 5"]
+            },
+            {
+                id: 3,
+                name: "Mahindra XUV700",
+                price: 150000,
+
+                details: ["Engine: 2.0L Turbo", "Mileage: 15 km/l", "Seats: 7"]
+            },
+            // Add more cars here...
+            {
+                id: 4,
+                name: "tesla",
+                price: 200000,
+                details: ["Engine Type: Electric",
+                    "Transmission: Automatic",
+                    "Type: Sedan"]
+
+            }
+        ];
+
+        const carList = document.getElementById("carList");
+        const carModal = document.getElementById("carModal");
+        const carName = document.getElementById("carName");
+        const carImage = document.getElementById("carImage");
+        const carSpecs = document.getElementById("carSpecs");
+        const closeModal = document.querySelector(".close-btn");
+
+        // Render cars dynamically
+        function renderCars(filterPrice = 200000) {
+            carList.innerHTML = ""; // Clear the car list
+            cars
+                .filter(car => car.price <= filterPrice)
+                .forEach(car => {
+                    const card = document.createElement("div");
+                    card.classList.add("car-card");
+                    card.innerHTML = `
+                        <img src="${car.image}" alt="${car.name}">
+                        <h3>${car.name}</h3>
+                        <p>Price: $${car.price.toLocaleString()}</p>
+                    `;
+                    card.addEventListener("click", () => showModal(car));
+                    carList.appendChild(card);
+                });
+        }
+
+        // Show modal with car details
+        function showModal(car) {
+            carName.textContent = car.name;
+            carImage.src = car.image;
+            carSpecs.innerHTML = car.details.map(detail => `<li>${detail}</li>`).join("");
+            carModal.style.display = "flex";
+        }
+
+        // Close modal
+        closeModal.addEventListener("click", () => {
+            carModal.style.display = "none";
+        });
+
+        // Update price display and filter cars
+        function updatePriceDisplay() {
+            const priceRange = document.getElementById("priceRange");
+            const priceValue = document.getElementById("priceValue");
+            priceValue.textContent = `$${parseInt(priceRange.value).toLocaleString()}`;
+            renderCars(priceRange.value);
+        }
+
+        // Search functionality
+        const searchInput = document.querySelector("nav .search-bar input");
+        searchInput.addEventListener("input", () => {
+            const query = searchInput.value.toLowerCase();
+            carList.innerHTML = ""; // Clear the car list
+            cars
+                .filter(car => car.name.toLowerCase().includes(query))
+                .forEach(car => {
+                    const card = document.createElement("div");
+                    card.classList.add("car-card");
+                    card.innerHTML = `
+                        <img src="${car.image}" alt="${car.name}">
+                        <h3>${car.name}</h3>
+                        <p>Price: $${car.price.toLocaleString()}</p>
+                    `;
+                    card.addEventListener("click", () => showModal(car));
+                    carList.appendChild(card);
+                });
+        });
+
+        // Smooth scroll for navbar links
+        document.querySelectorAll("nav ul li").forEach(link => {
+            link.addEventListener("click", () => {
+                const sectionId = link.textContent.toLowerCase();
+                document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
+            });
+        });
+
+        // Initialize page
+        renderCars();
+    </script>
+
+
+
+</body>
+
+</html>
